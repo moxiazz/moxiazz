@@ -247,7 +247,7 @@ class NeuralRestorationModel:
         """
         # Flatten input and concatenate timestep
         x_flat = x_t.flatten()
-        t_normalized = np.array([t / 1000.0])  # Normalize timestep
+        t_normalized = np.array([t / max(1000.0, self.T)])  # Normalize timestep
         x_input = np.concatenate([x_flat, t_normalized])
         
         # Simple feedforward pass with ReLU activation
@@ -265,7 +265,10 @@ class NeuralRestorationModel:
         """
         Update model weights using gradient descent.
         
-        This is a simplified implementation. In practice, use automatic differentiation.
+        NOTE: This is a simplified placeholder implementation for demonstration purposes.
+        In production, use proper automatic differentiation with PyTorch/TensorFlow.
+        The gradient computation here is not mathematically correct and serves only
+        as a structural example.
         
         Args:
             x_t: Input sequence
@@ -276,11 +279,11 @@ class NeuralRestorationModel:
         # Get prediction
         pred = self(x_t, t)
         
-        # Compute gradient (simplified)
+        # Compute gradient (simplified placeholder - NOT mathematically correct)
         grad = 2 * (pred - target) / target.size
         
-        # Simple gradient descent update (placeholder)
-        # In practice, implement proper backpropagation
+        # Simple gradient descent update (placeholder - DO NOT USE IN PRODUCTION)
+        # Proper implementation requires backpropagation through the network
         for key in self.weights:
             if key.startswith('W'):
                 self.weights[key] -= lr * np.abs(grad).mean() * np.sign(self.weights[key])

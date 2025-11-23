@@ -7,6 +7,9 @@ import numpy as np
 from abc import ABC, abstractmethod
 from typing import Optional
 
+# Numerical stability constant
+EPSILON = 1e-8
+
 
 class DegradationOperator(ABC):
     """Base class for degradation operators."""
@@ -71,6 +74,7 @@ class ChaoticDegradation(DegradationOperator):
         if self.noise_schedule == "linear":
             return self.beta_start + (self.beta_end - self.beta_start) * (t / T)
         elif self.noise_schedule == "cosine":
+            # Small offset to prevent boundary issues (from DDPM paper)
             s = 0.008
             f_t = np.cos((t / T + s) / (1 + s) * np.pi / 2) ** 2
             f_0 = np.cos(s / (1 + s) * np.pi / 2) ** 2
@@ -130,13 +134,13 @@ class ChaoticDegradation(DegradationOperator):
         alpha = 1 - beta
         
         # Estimate noise that was added
-        noise_est = (x_t - np.sqrt(alpha) * x_pred) / np.sqrt(beta + 1e-8)
+        noise_est = (x_t - np.sqrt(alpha) * x_pred) / np.sqrt(beta + EPSILON)
         
         # Remove one step of degradation
         beta_prev = self.get_beta(t - 1, T) if t > 1 else 0
         alpha_prev = 1 - beta_prev
         
-        x_prev = (x_t - np.sqrt(beta) * noise_est) / np.sqrt(alpha + 1e-8)
+        x_prev = (x_t - np.sqrt(beta) * noise_est) / np.sqrt(alpha + EPSILON)
         
         # Add smaller noise for previous step
         if t > 1:
