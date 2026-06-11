@@ -9,4 +9,3 @@ moxiazz/moxiazz is a ✨ special ✨ repository because its `README.md` (this fi
 You can click the Preview link to take a look at your changes.
 --->
 ![暗色](https://raw.githubusercontent.com/moxiazz/moxiazz/output/github-contribution-grid-snake-dark.svg)
-![亮色](https://raw.githubusercontent.com/moxiazz/moxiazz/output/github-contribution-grid-snake.svg)
